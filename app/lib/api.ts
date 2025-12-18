@@ -16,18 +16,42 @@ async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promi
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  const response = await fetch(endpoint, {
-    ...options,
-    headers,
-  });
+  try {
+    const response = await fetch(endpoint, {
+      ...options,
+      headers,
+    });
 
-  const data = await response.json();
+    const contentType = response.headers.get("content-type") || "";
 
-  if (!response.ok) {
-    throw new Error(data.message || `Request failed: ${response.status}`);
+    let data: any = null;
+
+    if (contentType.includes("application/json")) {
+      try {
+        data = await response.json();
+      } catch (parseError) {
+        throw new Error("Failed to parse JSON response");
+      }
+    } else {
+      const text = await response.text();
+      if (!response.ok) {
+        throw new Error(`Request failed: ${response.status} - ${text}`);
+      }
+      throw new Error("Unexpected non-JSON response from server");
+    }
+
+    if (!response.ok) {
+      const message = (data && data.message) || `Request failed: ${response.status}`;
+      throw new Error(message);
+    }
+
+    return data as T;
+  } catch (error) {
+    if (error instanceof Error) {
+      throw error;
+    }
+    throw new Error("Network request failed");
   }
-
-  return data;
 }
 
 export const api = {
