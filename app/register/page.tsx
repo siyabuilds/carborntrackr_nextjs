@@ -152,7 +152,19 @@ export default function RegisterPage() {
                     onChange={(e) => field.onChange(e.target.value)}
                     onFocus={() => setFocusedField(field.name)}
                     onBlur={() => setFocusedField(null)}
-                    autoComplete="off"
+                    autoComplete={
+                      field.name === "fullName"
+                        ? "name"
+                        : field.name === "username"
+                        ? "username"
+                        : field.name === "email"
+                        ? "email"
+                        : field.name === "password"
+                        ? "new-password"
+                        : field.name === "confirmPassword"
+                        ? "new-password"
+                        : "on"
+                    }
                     required
                     className="flex-1 bg-transparent text-foreground placeholder-muted outline-none"
                   />
