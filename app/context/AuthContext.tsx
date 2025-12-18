@@ -65,6 +65,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const data = await api.login(credentials);
 
+    if (!data || typeof data.token !== "string" || data.token.trim() === "") {
+      console.error("Invalid token received from login response:", data);
+      throw new Error("Invalid authentication token received from server");
+    }
     localStorage.setItem(TOKEN_KEY, data.token);
     
     const userData: User = {
