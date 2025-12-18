@@ -4,8 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, Leaf } from "lucide-react";
+import { Menu, X, Leaf, LogOut } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
+import { useAuth } from "../context/AuthContext";
 
 const navLinks = [
   { href: "/dashboard", label: "Dashboard" },
@@ -17,6 +18,7 @@ const navLinks = [
 export default function NavBar() {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
+  const { isAuthenticated, logout, isLoading } = useAuth();
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
@@ -79,6 +81,15 @@ export default function NavBar() {
               </Link>
             ))}
             <ThemeToggle />
+            {!isLoading && isAuthenticated && (
+              <button
+                onClick={logout}
+                className="flex items-center gap-2 rounded-lg bg-card px-3 py-2 text-sm font-medium text-muted transition-colors hover:bg-border hover:text-foreground"
+              >
+                <LogOut className="h-4 w-4" />
+                Logout
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -149,6 +160,25 @@ export default function NavBar() {
                   </Link>
                 </motion.div>
               ))}
+              {!isLoading && isAuthenticated && (
+                <motion.div
+                  custom={navLinks.length}
+                  variants={linkVariants}
+                  initial="closed"
+                  animate="open"
+                >
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      logout();
+                    }}
+                    className="flex w-full items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-muted transition-colors hover:bg-card hover:text-foreground"
+                  >
+                    <LogOut className="h-4 w-4" />
+                    Logout
+                  </button>
+                </motion.div>
+              )}
             </div>
           </motion.div>
         )}
