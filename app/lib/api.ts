@@ -160,4 +160,19 @@ export const api = {
     apiRequest<{ message: string }>(`/api/activities/${id}`, {
       method: "DELETE",
     }),
+
+  // Leaderboard
+  getLeaderboard: () =>
+    apiRequest<LeaderboardEntry[]>("/api/leaderboard", {
+      method: "GET",
+    }),
 };
+
+export interface LeaderboardEntry {
+  rank: number;
+  userId: string;
+  username: string;
+  fullName: string;
+  totalEmissions: number;
+  activityCount: number;
+}
