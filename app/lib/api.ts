@@ -54,6 +54,78 @@ async function apiRequest<T>(endpoint: string, options: RequestInit = {}): Promi
   }
 }
 
+export interface Activity {
+  _id: string;
+  userId: string;
+  category: string;
+  activity: string;
+  value: number;
+  date: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export const activityData: Record<string, Record<string, number>> = {
+  Transport: {
+    "Car (10km)": 2.4,
+    "Bus (10km)": 1.5,
+    "Train (10km)": 0.6,
+    "Bike (10km)": 0.0,
+    "Walk (10km)": 0.0,
+    "Flight (1hr domestic)": 90.0,
+    "Flight (international, economy)": 250.0,
+  },
+  Food: {
+    "Beef (200g)": 6.0,
+    "Chicken (200g)": 2.5,
+    "Pork (200g)": 3.0,
+    "Eggs (2 eggs)": 0.5,
+    "Vegetarian Meal": 1.0,
+    "Vegan Meal": 0.8,
+    "Dairy (250ml milk)": 1.2,
+  },
+  Energy: {
+    "Electricity (5 kWh)": 2.1,
+    "Electricity (10 kWh)": 4.2,
+    "Gas Heater (1 hr)": 1.8,
+    "Air Conditioner (1 hr)": 2.0,
+    "LED Lights (1 hr)": 0.05,
+    "Boil kettle (1x)": 0.15,
+  },
+  Waste: {
+    "Landfill Waste (1 bag)": 2.0,
+    "Recycled Waste (1 bag)": 0.5,
+    "Composted Waste (1 bag)": 0.2,
+    "Plastic Bottle Thrown": 0.1,
+    "Plastic Bottle Recycled": 0.02,
+  },
+  Water: {
+    "Shower (10 mins)": 1.2,
+    Bath: 1.8,
+    "Tap left running (1 min)": 0.2,
+    "Toilet Flush": 0.6,
+    "Washing Machine (1 load)": 1.4,
+    "Dishwasher (1 load)": 1.0,
+  },
+  Shopping: {
+    "New T-shirt": 3.0,
+    "New Jeans": 10.0,
+    Smartphone: 70.0,
+    Laptop: 200.0,
+    "Plastic Bag Used": 0.1,
+    "Plastic Bag Reused": 0.01,
+  },
+};
+
+export const categoryColors: Record<string, string> = {
+  Transport: "#3b82f6",
+  Food: "#f59e0b",
+  Energy: "#ef4444",
+  Waste: "#8b5cf6",
+  Water: "#06b6d4",
+  Shopping: "#ec4899",
+};
+
 export const api = {
   login: (credentials: { email?: string; username?: string; password: string }) =>
     apiRequest<{ message: string; token: string }>("/api/auth/login", {
@@ -70,5 +142,22 @@ export const api = {
   validateToken: () =>
     apiRequest<{ valid: boolean }>("/api/auth/validate", {
       method: "GET",
+    }),
+
+  // Activities
+  getActivities: () =>
+    apiRequest<Activity[]>("/api/activities", {
+      method: "GET",
+    }),
+
+  createActivity: (data: { category: string; activity: string; date?: string }) =>
+    apiRequest<Activity>("/api/activities", {
+      method: "POST",
+      body: JSON.stringify(data),
+    }),
+
+  deleteActivity: (id: string) =>
+    apiRequest<{ message: string }>(`/api/activities/${id}`, {
+      method: "DELETE",
     }),
 };

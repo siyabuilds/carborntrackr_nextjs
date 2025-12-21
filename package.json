@@ -9,10 +9,12 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "chart.js": "^4.5.1",
     "framer-motion": "^12.23.26",
     "lucide-react": "^0.561.0",
     "next": "16.0.10",
     "react": "19.2.1",
+    "react-chartjs-2": "^5.3.1",
     "react-dom": "19.2.1"
   },
   "devDependencies": {
