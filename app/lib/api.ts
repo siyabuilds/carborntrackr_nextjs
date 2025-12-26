@@ -166,6 +166,22 @@ export const api = {
     apiRequest<LeaderboardEntry[]>("/api/leaderboard", {
       method: "GET",
     }),
+
+  // Summaries
+  getCurrentSummary: () =>
+    apiRequest<{ summary: WeeklySummary }>("/api/summaries/current", {
+      method: "GET",
+    }),
+
+  getSummaryByWeek: (weekStart: string) =>
+    apiRequest<{ summary: WeeklySummary }>(`/api/summaries/${weekStart}`, {
+      method: "GET",
+    }),
+
+  generateSummary: () =>
+    apiRequest<{ message: string; summary: WeeklySummary }>("/api/summaries/generate", {
+      method: "POST",
+    }),
 };
 
 export interface LeaderboardEntry {
@@ -175,4 +191,41 @@ export interface LeaderboardEntry {
   fullName: string;
   totalEmissions: number;
   activityCount: number;
+}
+
+export interface WeeklySummary {
+  _id: string;
+  userId: string;
+  weekStart: string;
+  weekEnd: string;
+  totalValue: number;
+  activitiesCount: number;
+  byCategoryTotals: Record<string, number>;
+  byCategoryCounts: Record<string, number>;
+  highestEmissionCategory: {
+    category: string;
+    emissions: number;
+    activityCount: number;
+  } | null;
+  lowestEmissionCategory: {
+    category: string;
+    emissions: number;
+    activityCount: number;
+  } | null;
+  personalizedTip: {
+    category: string;
+    message: string;
+    tipType: "positive" | "improvement";
+  } | null;
+  reductionTarget: {
+    targetValue: number;
+    targetType: "percentage" | "absolute";
+    previousWeekEmissions: number | null;
+    reductionAchieved: number | null;
+    progressPercentage: number | null;
+    targetMet: boolean;
+  } | null;
+  generatedAt: string;
+  createdAt: string;
+  updatedAt: string;
 }
