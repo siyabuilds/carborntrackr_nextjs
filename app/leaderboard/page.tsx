@@ -38,13 +38,13 @@ export default function LeaderboardPage() {
   const getMedalColor = (rank: number) => {
     switch (rank) {
       case 1:
-        return "#FFD700"; // Gold
+        return "#FFD700"; // Gold - for first place
       case 2:
-        return "#C0C0C0"; // Silver
+        return "#C0C0C0"; // Silver - for second place
       case 3:
-        return "#CD7F32"; // Bronze
+        return "#CD7F32"; // Bronze - for third place
       default:
-        return null;
+        return null; // No medal for other ranks
     }
   };
 
@@ -57,7 +57,10 @@ export default function LeaderboardPage() {
           className="flex h-8 w-8 items-center justify-center rounded-full sm:h-10 sm:w-10"
           style={{ backgroundColor: `${medalColor}20` }}
         >
-          <Medal className="h-4 w-4 sm:h-5 sm:w-5" style={{ color: medalColor }} />
+          <Medal
+            className="h-4 w-4 sm:h-5 sm:w-5"
+            style={{ color: medalColor }}
+          />
         </div>
       );
     }
@@ -295,7 +298,9 @@ export default function LeaderboardPage() {
                       entry.rank <= 3 ? "bg-primary/5" : ""
                     }`}
                   >
-                    <td className="py-3 sm:py-4">{getRankDisplay(entry.rank)}</td>
+                    <td className="py-3 sm:py-4">
+                      {getRankDisplay(entry.rank)}
+                    </td>
                     <td className="py-3 sm:py-4">
                       <div className="min-w-0">
                         <p className="font-medium text-foreground truncate">
@@ -353,10 +358,10 @@ export default function LeaderboardPage() {
               How the Leaderboard Works
             </h3>
             <p className="mt-1 text-sm text-muted">
-              Rankings are based on total carbon emissions. Users with the lowest
-              emissions rank highest. Keep logging your activities to track your
-              impact and climb the leaderboard! Every small action counts towards
-              a greener planet. 🌍
+              Rankings are based on total carbon emissions. Users with the
+              lowest emissions rank highest. Keep logging your activities to
+              track your impact and climb the leaderboard! Every small action
+              counts towards a greener planet. 🌍
             </p>
           </div>
         </div>
